@@ -12,6 +12,7 @@ if ('serviceWorker' in navigator) {
 self.addEventListener("install", event => {
   console.log('caching urls')
   const urlsToCache = [
+    '/logo.png',
     '/src/App.css',
     '/src/index.js',
     '/src/images/logo.png',
@@ -40,6 +41,7 @@ self.addEventListener('activate', event => {
 
 
 self.addEventListener('fetch', async event => {
+  console.log('event.request ', event.request)
   event.respondWith(event.request.destination === "image" ? 
   fetchDataCacheFirst(event) : fetchDataNetworkFirst(event))
 })
@@ -54,8 +56,10 @@ const fetchDataNetworkFirst = async event => {
 
 const fetchDataCacheFirst = async event => {
   try {
-    return await caches.match(event.request)
+    console.log('about to return image', await caches.match(event.request.url))
+    return caches.match(event.request)
   } catch (err) {
-    return await fetch(event.request)
+    console.log('error in fetch ', err)
+    return fetch(event.request)
   }
 }

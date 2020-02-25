@@ -20,7 +20,7 @@ const App = () => {
   return (
     <Container>
       <Segment>
-        <Image size="small" />
+        <Image src={logo} size="small" />
       </Segment>
       {statusArray.map(status => 
           <Segment key={status.id} padded={"very"}>
