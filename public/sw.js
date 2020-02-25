@@ -12,12 +12,20 @@ if ('serviceWorker' in navigator) {
 self.addEventListener("install", event => {
   console.log('caching urls')
   const urlsToCache = [
+    '/',
+    '/main.js',
     '/logo.png',
+    '/styles/main.css',
+    '/script/main.js',
     '/manifest.json',
+    '/static/css',
+    '/static/js',
     '/src/App.css',
     '/src/index.js',
-    '/src/images/logo.png',
-    '/src/static/tubeMap.js',
+    '/tubeMap.js',
+    '/static/js/bundle.js',
+    '/static/js/0.chunk.js',
+    '/static/js/main.chunk.js',
     'https://api.tfl.gov.uk/line/mode/tube,overground,dlr,tflrail/status'
 ]
   event.waitUntil(
@@ -37,7 +45,8 @@ const clearCache = async () => {
 }
 
 self.addEventListener('activate', event => {
-  event.waitUntil(clearCache())
+  console.log('activating')
+  // event.waitUntil(clearCache())
 }) 
 
 
@@ -49,19 +58,46 @@ self.addEventListener('fetch', async event => {
 
 const fetchDataNetworkFirst = async event => {
   try {
-    console.log('about to return non-image', await caches.match(event.request))
+    console.log('about to return non-image from network request', await fetch(event.request))
     return await fetch(event.request);
   } catch (err) {
+    console.log('falling back to cache ', await caches.match(event.request))
     return await caches.match(event.request);
   }
 }
 
 const fetchDataCacheFirst = async event => {
   try {
-    console.log('about to return image', await caches.match(event.request))
+    console.log('about to return image from cache ', await caches.match(event.request))
     return caches.match(event.request)
   } catch (err) {
     console.log('error in fetch ', err)
     return fetch(event.request)
   }
 }
+
+// self.addEventListener('fetch', event => {
+//   event.respondWith(fetchDataAndUpdateCache(event))
+// })
+
+// const fetchDataAndUpdateCache = async event => {
+//   const cache = await caches.open("status")
+//   const cacheResponse = await cache.match(event.request)
+//   const networkResponse = await fetch(event.request)
+
+//   event.waitUntil(
+//     updateCache(cache, event, cacheResponse, networkResponse)
+//   )
+
+  
+// }
+
+// const updateCache = async (cache, event, cacheResponse, networkResponse) => {
+//    await cache.put(event.request, networkResponse.clone())
+//    return cacheResponse || networkResponse 
+// }
+
+// self.addEventListener('sync', event => {
+//   const urlsToCache = ["https://api.tfl.gov.uk/line/mode/tube,overground,dlr,tflrail/status"]
+//   event.waitUntil(cacheResources(urlsToCache))
+// })

@@ -12,11 +12,21 @@ if ('serviceWorker' in navigator) {
 self.addEventListener("install", event => {
   console.log('caching urls')
   const urlsToCache = [
+    '/',
+    '/main.js',
     '/logo.png',
+    '/styles/main.css',
+    '/script/main.js',
+    '/manifest.json',
+    '/static/css',
+    '/static/js',
     '/src/App.css',
     '/src/index.js',
-    '/src/images/logo.png',
-    '/src/static/tubeMap.js'
+    '/tubeMap.js',
+    '/static/js/bundle.js',
+    '/static/js/0.chunk.js',
+    '/static/js/main.chunk.js',
+    'https://api.tfl.gov.uk/line/mode/tube,overground,dlr,tflrail/status'
 ]
   event.waitUntil(
     cacheResources(urlsToCache)

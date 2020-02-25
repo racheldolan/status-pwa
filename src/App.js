@@ -10,10 +10,11 @@ const App = () => {
   const fetchStatuses = async () => {
     const response = await fetch(url);
     const data = await response.json();
+    console.log('statusArray ', data)
+
     setStatusArray(data);
   };
 
-    console.log('statusArray ', statusArray)
   useEffect(() => {
     fetchStatuses();
   }, []);
