@@ -13,6 +13,7 @@ self.addEventListener("install", event => {
   console.log('caching urls')
   const urlsToCache = [
     '/logo.png',
+    '/manifest.json',
     '/src/App.css',
     '/src/index.js',
     '/src/images/logo.png',
@@ -38,7 +39,6 @@ const clearCache = async () => {
 self.addEventListener('activate', event => {
   event.waitUntil(clearCache())
 }) 
-
 
 
 self.addEventListener('fetch', async event => {
