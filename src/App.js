@@ -13,6 +13,7 @@ const App = () => {
     setStatusArray(data);
   };
 
+    console.log('statusArray ', statusArray)
   useEffect(() => {
     fetchStatuses();
   }, []);

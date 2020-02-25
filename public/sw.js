@@ -16,7 +16,8 @@ self.addEventListener("install", event => {
     '/src/App.css',
     '/src/index.js',
     '/src/images/logo.png',
-    '/src/static/tubeMap.js'
+    '/src/static/tubeMap.js',
+    'https://api.tfl.gov.uk/line/mode/tube,overground,dlr,tflrail/status'
 ]
   event.waitUntil(
     cacheResources(urlsToCache)
@@ -48,6 +49,7 @@ self.addEventListener('fetch', async event => {
 
 const fetchDataNetworkFirst = async event => {
   try {
+    console.log('about to return non-image', await caches.match(event.request))
     return await fetch(event.request);
   } catch (err) {
     return await caches.match(event.request);
@@ -56,7 +58,7 @@ const fetchDataNetworkFirst = async event => {
 
 const fetchDataCacheFirst = async event => {
   try {
-    console.log('about to return image', await caches.match(event.request.url))
+    console.log('about to return image', await caches.match(event.request))
     return caches.match(event.request)
   } catch (err) {
     console.log('error in fetch ', err)
