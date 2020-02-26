@@ -10,7 +10,7 @@ const App = () => {
   const fetchStatuses = async () => {
     const response = await fetch(url);
     const data = await response.json();
-    console.log('statusArray ', data)
+    console.log('statusArray ', data.map(datum => datum.disruptions.length > 0))
 
     setStatusArray(data);
   };
