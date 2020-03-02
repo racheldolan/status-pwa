@@ -19,9 +19,9 @@ const App = () => {
 
   return (
     <Container>
-      <Segment>
+      {/* <Segment>
         <Image src={logo} size="small" />
-      </Segment>
+      </Segment> */}
       {statusArray.map(status => 
           <Segment key={status.id} padded={"very"}>
             <Item.Group>
