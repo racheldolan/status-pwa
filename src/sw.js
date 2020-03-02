@@ -3,24 +3,24 @@ if ("function" === typeof importScripts) {
   importScripts(
     "https://storage.googleapis.com/workbox-cdn/releases/5.0.0/workbox-sw.js"
   );
-
   /* global workbox */
   if (workbox) {
     console.log("Workbox is loaded");
+    const version = "0.1.0"
     const { registerRoute, NavigationRoute } = workbox.routing
     const { NetworkFirst, CacheFirst } = workbox.strategies;
     const {BroadcastCacheUpdate} = workbox.broadcastUpdate;
     const { createHandlerBoundToURL} = workbox.precaching
     /* injection point for manifest files.  */
     workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
-    workbox.precaching.precacheAndRoute([{url: '/index.html'}])
+    workbox.precaching.precacheAndRoute([{url: '/index.html', revision: version}])
     // /* custom cache rules*/
     // workbox.routing.registerNavigationRoute("/index.html");
     
     registerRoute(
       /\.(?:png|gif|jpg|jpeg|js|json|css|html)$/,
       new NetworkFirst({
-        cacheName: "assets"
+        cacheName: `assets-${version}`
       })
       );
       
@@ -33,7 +33,7 @@ if ("function" === typeof importScripts) {
       "https://api.tfl.gov.uk/line/mode/tube,overground,dlr,tflrail/status",
       new NetworkFirst({
         networkTimeoutSeconds: 2,
-        cacheName: "statuses",
+        cacheName: `statuses-${version}`,
         plugins: [
           new BroadcastCacheUpdate('status-updates')
         ]
