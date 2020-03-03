@@ -5,7 +5,6 @@ import tubeMap from "./static/tubeMap";
 const Status = ({ status: { id, name, lineStatuses } }) => {
   return (
     <Segment
-      color={tubeMap[id] && `#${tubeMap[id].color}`}
       basic
       textAlign="center"
       key={id}
