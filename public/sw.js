@@ -38,6 +38,7 @@ if ("function" === typeof importScripts) {
     registerRoute(
       // cache dynamic data
       "https://api.tfl.gov.uk/line/mode/tube,overground,dlr,tflrail/status",
+      "https://api.tfl.gov.uk/line/mode/national-rail/status",
       new NetworkFirst({
         networkTimeoutSeconds: 3,
         cacheName: `statuses-${version}`,

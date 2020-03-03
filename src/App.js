@@ -69,7 +69,8 @@ const App = () => {
         />
       </Menu>
       <Divider hidden />
-      <Loader active={(isLoadingNationalRailStatuses && activeMenuItem === "rail") || (isLoadingTubeStatuses && activeMenuItem === "tube")} />
+      <Loader active={(isLoadingNationalRailStatuses && activeMenuItem === "rail") || 
+      (isLoadingTubeStatuses && activeMenuItem === "tube")} />
       {activeMenuItem === "tube"
         ? tubeStatusArray.map(status => <Status key={status.id} status={status} />)
         : nationalRailStatus.map(status => (
