@@ -1,9 +1,8 @@
 import React from "react";
-import { Card, Label, Divider, Icon } from "semantic-ui-react";
+import { Card, Label, Icon } from "semantic-ui-react";
 import tubeMap from "./static/tubeMap";
 
 const Status = ({ status: { id, name, lineStatuses } }) => (
-  <>
     <Card key={id}>
       <Card.Content>
         <Card.Header content={name} />
@@ -31,7 +30,5 @@ const Status = ({ status: { id, name, lineStatuses } }) => (
         ))}
       </Card.Content>
     </Card>
-    <Divider />
-  </>
 );
 export default Status;
