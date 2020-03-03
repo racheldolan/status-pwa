@@ -1,46 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { Container, Image, Divider, Menu, Segment, Loader, Card } from "semantic-ui-react";
+import {
+  Container,
+  Image,
+  Divider,
+  Menu,
+  Segment,
+  Loader,
+  Card,
+  Header
+} from "semantic-ui-react";
 import logo from "./images/logo.png";
 import nationalRailLogo from "./images/national-rail-logo.png";
 import Status from "./Status";
-
 
 const App = () => {
   const [tubeStatusArray, setTubeStatusArray] = useState([]);
   const [nationalRailStatus, setNationalRailStatus] = useState([]);
   const [activeMenuItem, setActiveMenuItem] = useState("tube");
-  const [isLoadingNationalRailStatuses, setIsLoadingNationalRailStatuses] = useState(false)
-  const [isLoadingTubeStatuses, setIsLoadingTubeStatuses] = useState(false)
+  const [
+    isLoadingNationalRailStatuses,
+    setIsLoadingNationalRailStatuses
+  ] = useState(false);
+  const [isLoadingTubeStatuses, setIsLoadingTubeStatuses] = useState(false);
 
   const fetchDataAndSortLinesByStatus = async url => {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.reduce(
-      (acc, currStatus) =>
-        !currStatus.lineStatuses.every(
-          status => status.statusSeverityDescription === "Good Service"
-        )
-          ? [currStatus, ...acc]
-          : [...acc, currStatus],
-      []
-    );
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.reduce(
+        (acc, currStatus) =>
+          !currStatus.lineStatuses.every(
+            status => status.statusSeverityDescription === "Good Service"
+          )
+            ? [currStatus, ...acc]
+            : [...acc, currStatus],
+        []
+      );
+    } catch (error) {
+      console.log(`Error fetching latest statuses`);
+      return null;
+    }
   };
 
   useEffect(() => {
     const fetchNationalRailStatuses = async () => {
-      setIsLoadingNationalRailStatuses(true)
+      setIsLoadingNationalRailStatuses(true);
       const orderedStatusArray = await fetchDataAndSortLinesByStatus(
         "https://api.tfl.gov.uk/line/mode/national-rail/status"
       );
-      setIsLoadingNationalRailStatuses(false)
+      setIsLoadingNationalRailStatuses(false);
       setNationalRailStatus(orderedStatusArray);
     };
     const fetchTubeStatuses = async () => {
-      setIsLoadingTubeStatuses(true)
+      setIsLoadingTubeStatuses(true);
       const orderedStatusArray = await fetchDataAndSortLinesByStatus(
         "https://api.tfl.gov.uk/line/mode/tube,overground,dlr,tflrail/status"
       );
-      setIsLoadingTubeStatuses(false)
+      setIsLoadingTubeStatuses(false);
       setTubeStatusArray(orderedStatusArray);
     };
     fetchTubeStatuses();
@@ -69,17 +85,30 @@ const App = () => {
         />
       </Menu>
       <Divider hidden />
-      <Loader content="Loading..." active={(isLoadingNationalRailStatuses && activeMenuItem === "rail") || 
-      (isLoadingTubeStatuses && activeMenuItem === "tube")} />
-      
+      <Loader
+        content="Loading..."
+        active={
+          (isLoadingNationalRailStatuses && activeMenuItem === "rail") ||
+          (isLoadingTubeStatuses && activeMenuItem === "tube")
+        }
+      />
+
       <Card.Group itemsPerRow={3} stackable>
-      {activeMenuItem === "tube"
-        ? tubeStatusArray.map(status => <Status key={status.id} status={status} />)
-        : nationalRailStatus.map(status => (
+        {activeMenuItem === "tube" && tubeStatusArray ? (
+          tubeStatusArray.map(status => (
             <Status key={status.id} status={status} />
-          ))}
-          </Card.Group>
-     </Container>
+          ))
+        ) : activeMenuItem === "tube" && !tubeStatusArray ? (
+          <Header content="Oops, something went wrong" />
+        ) : activeMenuItem === "rail" ? (
+          nationalRailStatus.map(status => (
+            <Status key={status.id} status={status} />
+          ))
+        ) : (
+          <Header content="Oops, something went wrong" />
+        )}
+      </Card.Group>
+    </Container>
   );
 };
 
