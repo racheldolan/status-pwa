@@ -2,16 +2,16 @@ import React from "react";
 import { Card, Label, Icon } from "semantic-ui-react";
 import tubeMap from "./static/tubeMap";
 
-const Status = ({ status: { id, name, lineStatuses } }) => (
-    <Card key={id}>
+const Status = ({ status: { id: statusId, name, lineStatuses } }) => (
+    <Card key={statusId}>
       <Card.Content>
         <Card.Header content={name} />
-        {tubeMap[id] && (
+        {tubeMap[statusId] && (
           <Label
             circular
             empty
             style={{
-              backgroundColor: `#${tubeMap[id].color}`,
+              backgroundColor: `#${tubeMap[statusId].color}`,
               marginRight: "0.5rem"
             }}
           />

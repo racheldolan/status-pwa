@@ -71,6 +71,7 @@ const App = () => {
       <Divider hidden />
       <Loader content="Loading..." active={(isLoadingNationalRailStatuses && activeMenuItem === "rail") || 
       (isLoadingTubeStatuses && activeMenuItem === "tube")} />
+      
       <Card.Group itemsPerRow={3} stackable>
       {activeMenuItem === "tube"
         ? tubeStatusArray.map(status => <Status key={status.id} status={status} />)

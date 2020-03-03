@@ -28,7 +28,7 @@ if ("function" === typeof importScripts) {
       );
 
     registerRoute(
-      /\.(?:png|gif|jpg|jpeg)$/,
+      /\.(?:png|gif|jpg|jpeg|woff|woff2|ttf)$/,
       new CacheFirst({
         cacheName: `images-${version}`
       })
@@ -41,6 +41,14 @@ if ("function" === typeof importScripts) {
     registerRoute(
       // cache dynamic data
       "https://api.tfl.gov.uk/line/mode/tube,overground,dlr,tflrail/status",
+      new NetworkFirst({
+        networkTimeoutSeconds: 3,
+        cacheName: `statuses-${version}`,
+      })
+    );
+
+    registerRoute(
+      // cache dynamic data
       "https://api.tfl.gov.uk/line/mode/national-rail/status",
       new NetworkFirst({
         networkTimeoutSeconds: 3,
