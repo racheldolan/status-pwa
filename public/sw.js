@@ -12,7 +12,7 @@ if ("function" === typeof importScripts) {
     const {BroadcastCacheUpdate} = workbox.broadcastUpdate;
     const { createHandlerBoundToURL} = workbox.precaching
     /* injection point for manifest files.  */
-    workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
+    workbox.precaching.precacheAndRoute(self.__WB_MANIFEST || []);
     workbox.precaching.precacheAndRoute([{url: '/index.html', revision: version}])
     // /* custom cache rules*/
     // workbox.routing.registerNavigationRoute("/index.html");
