@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Image, Divider, Menu, Segment, Loader } from "semantic-ui-react";
+import { Container, Image, Divider, Menu, Segment, Loader, Card } from "semantic-ui-react";
 import logo from "./images/logo.png";
 import nationalRailLogo from "./images/national-rail-logo.png";
 import Status from "./Status";
@@ -56,7 +56,7 @@ const App = () => {
           size="small"
         />
       </Segment>
-      <Menu tabular pointing>
+      <Menu tabular>
         <Menu.Item
           name="Tube"
           active={activeMenuItem === "tube"}
@@ -69,14 +69,16 @@ const App = () => {
         />
       </Menu>
       <Divider hidden />
-      <Loader active={(isLoadingNationalRailStatuses && activeMenuItem === "rail") || 
+      <Loader content="Loading..." active={(isLoadingNationalRailStatuses && activeMenuItem === "rail") || 
       (isLoadingTubeStatuses && activeMenuItem === "tube")} />
+      <Card.Group itemsPerRow={3} stackable>
       {activeMenuItem === "tube"
         ? tubeStatusArray.map(status => <Status key={status.id} status={status} />)
         : nationalRailStatus.map(status => (
             <Status key={status.id} status={status} />
           ))}
-    </Container>
+          </Card.Group>
+     </Container>
   );
 };
 

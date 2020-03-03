@@ -19,8 +19,11 @@ if ("function" === typeof importScripts) {
     
     registerRoute(
       /\.(?:js|json|css|html)$/,
-      new NetworkFirst({
-        cacheName: `assets-${version}`
+      new StaleWhileRevalidate({
+        cacheName: `assets-${version}`,
+        plugins: [
+          new BroadcastCacheUpdate(`statuses-${version}`)
+        ]
       })
       );
 
@@ -42,27 +45,24 @@ if ("function" === typeof importScripts) {
       new NetworkFirst({
         networkTimeoutSeconds: 3,
         cacheName: `statuses-${version}`,
-        plugins: [
-          new BroadcastCacheUpdate(`statuses-${version}`)
-        ]
       })
     );
 
-    self.addEventListener('message', async (event) => {
-    console.log('message event listener ', event)
-    // Optional: ensure the message came from workbox-broadcast-update
-    if (event.data.meta === 'workbox-broadcast-update') {
-      const {cacheName, updatedUrl} = event.data.payload;
+  //   self.addEventListener('message', async (event) => {
+  //   console.log('message event listener ', event)
+  //   // Optional: ensure the message came from workbox-broadcast-update
+  //   if (event.data.meta === 'workbox-broadcast-update') {
+  //     const {cacheName, updatedUrl} = event.data.payload;
 
-      // Do something with cacheName and updatedUrl.
-      // For example, get the cached content and update
-      // the content on the page.
-      const cache = await caches.open(cacheName);
-      const updatedResponse = await cache.match(updatedUrl);
-      const updatedText = await updatedResponse.text();
-      console.log('updated text ', updatedText)
-    }
-  });
+  //     // Do something with cacheName and updatedUrl.
+  //     // For example, get the cached content and update
+  //     // the content on the page.
+  //     const cache = await caches.open(cacheName);
+  //     const updatedResponse = await cache.match(updatedUrl);
+  //     const updatedText = await updatedResponse.text();
+  //     console.log('updated text ', updatedText)
+  //   }
+  // });
   
   } else {
     console.log("Workbox could not be loaded. No Offline support");

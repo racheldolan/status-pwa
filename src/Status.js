@@ -1,45 +1,37 @@
 import React from "react";
-import { Item, Label, Segment, Divider, Icon } from "semantic-ui-react";
+import { Card, Label, Divider, Icon } from "semantic-ui-react";
 import tubeMap from "./static/tubeMap";
 
-const Status = ({ status: { id, name, lineStatuses } }) => {
-  return (
-    <Segment
-      basic
-      textAlign="center"
-      key={id}
-    >
-      <Item.Group>
-        <Item>
-          <Item.Content>
-            {tubeMap[id] && (
-              <Label
-              circular
-              empty
-                style={{
-                  backgroundColor: `#${tubeMap[id].color}`,
-                  marginRight: '0.5rem'
-                }}
-              />
+const Status = ({ status: { id, name, lineStatuses } }) => (
+  <>
+    <Card key={id}>
+      <Card.Content>
+        <Card.Header content={name} />
+        {tubeMap[id] && (
+          <Label
+            circular
+            empty
+            style={{
+              backgroundColor: `#${tubeMap[id].color}`,
+              marginRight: "0.5rem"
+            }}
+          />
+        )}
+        {lineStatuses.map(({ id, statusSeverityDescription }) => (
+          <>
+            <Card.Description key={id}>
+              {statusSeverityDescription}
+            </Card.Description>
+            {statusSeverityDescription !== "Good Service" && (
+              <Card.Meta>
+                <Icon name="alarm" color="red" />
+              </Card.Meta>
             )}
-            <Item.Header content={name} />
-            {lineStatuses.map(({ id, statusSeverityDescription }) => (
-              <>
-                <Item.Description key={id}>
-                  {statusSeverityDescription}
-                </Item.Description>
-                {statusSeverityDescription !== "Good Service" && (
-                  <Item.Extra>
-                    <Icon name="alarm" color="red" />
-                  </Item.Extra>
-                )}
-              </>
-            ))}
-          </Item.Content>
-        </Item>
-        <Divider />
-      </Item.Group>
-    </Segment>
-  );
-};
+          </>
+        ))}
+      </Card.Content>
+    </Card>
+    <Divider />
+  </>
+);
 export default Status;
